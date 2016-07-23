@@ -99,6 +99,14 @@ function initMap() {
     initSidebar();
 };
 
+function nextLocation(loc) {
+	$.post("next_loc?lat=" + loc.lat() + "&lon=" + loc.lng(), {}).done(function (data) {
+		$("#next-location").val("");
+		map.setCenter(loc);
+		marker.setPosition(loc);
+	});		
+}
+
 function initSidebar() {
     $('#gyms-switch').prop('checked', localStorage.showGyms === 'true');
     $('#pokemon-switch').prop('checked', localStorage.showPokemon === 'true');
@@ -116,11 +124,7 @@ function initSidebar() {
         }
 
         var loc = places[0].geometry.location;
-        $.post("next_loc?lat=" + loc.lat() + "&lon=" + loc.lng(), {}).done(function (data) {
-            $("#next-location").val("");
-            map.setCenter(loc);
-            marker.setPosition(loc);
-        });
+		nextLocation(loc);
     });
 }
 
@@ -710,4 +714,7 @@ $(function () {
         }
     });
 
+	map.addListener("click", function(e) {
+		nextLocation(e.latLng);
+	});
 });

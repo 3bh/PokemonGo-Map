@@ -60,6 +60,14 @@ class Pogom(Flask):
         else:
             config['NEXT_LOCATION'] = {'lat': lat, 'lon': lon}
             return 'ok'
+               
+    def set_search_area(self):
+        search_area = request.form.getlist('search_area')
+        config['SEARCH_AREA'] = search_area
+        
+    def get_search_area(self):
+        search_area = config['SEARCH_AREA']
+        return jsonify(search_area)
 
     def list_pokemon(self):
         # todo: check if client is android/iOS/Desktop for geolink, currently only supports android
